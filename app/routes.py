@@ -3,7 +3,8 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
-from app.forms import LoginForm, RegistrationForm
+from app import utility
+from app.forms import LoginForm, RegistrationForm, TransactionForm
 from app.models import User
 
 
@@ -18,12 +19,7 @@ def before_request():
 @app.route('/index')
 @login_required
 def index():
-    transactions = [
-        {
-            'user': {'username': 'Test'},
-            'amount': 50
-        }
-    ]
+    transactions = utility.get_transactions(current_user.id)
     return render_template('index.html', title='Home', transactions=transactions)
 
 
@@ -64,3 +60,18 @@ def register():
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
+
+
+@app.route('/transaction', methods=['GET', 'POST'])
+def transaction():
+    form = TransactionForm()
+    if form.validate_on_submit():
+        user_id = current_user.id
+        amount = form.amount.data
+        current_balance = current_user.current_balance
+
+        utility.add_transaction(user_id, amount, current_balance)
+        
+        flash('Congratulations, Transaction Complete!')
+        return redirect(url_for('index'))
+    return render_template('transaction.html', title='Transaction', form=form)

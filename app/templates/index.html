@@ -3,6 +3,6 @@
 {% block content %}
     <h1>Hi, {{ current_user.username }}!</h1>
     {% for transaction in transactions %}
-    <div><p>{{ transaction.user.username }} amount: <b>{{ transaction.amount }}</b></p></div>
+    <div><p><b>{{ transaction.transaction_type }}</b> amount: <b>{{ transaction.amount }}</b> at: <b>{{ transaction.timestamp }}</b></p></div>
     {% endfor %}
 {% endblock %}

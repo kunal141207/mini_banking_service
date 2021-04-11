@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
-    TextAreaField
+    TextAreaField, IntegerField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
-    Length
+    Length, NumberRange
 from app.models import User
 
 
@@ -29,3 +29,7 @@ class RegistrationForm(FlaskForm):
         if user is not None:
             raise ValidationError('Please use a different email address.')
 
+
+class TransactionForm(FlaskForm):
+    amount = IntegerField('Amount', validators=[DataRequired()])
+    submit = SubmitField('Add Transaction')
