@@ -14,6 +14,8 @@ flask run
 
 ## Steps to celery (background verification)
 
+No special characters are allowed in username
+
 ```bash
 source venv/bin/activate
 celery -A celery_tasks worker -l info
