@@ -15,4 +15,4 @@ login.login_view = 'login'
 celery = Celery("banking_system", broker=app.config['CELERY_BROKER_URL'])
 celery.conf.update(app.config)
 
-from app import routes, models
+from app import routes, models, errors
