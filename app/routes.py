@@ -58,6 +58,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash('Congratulations, you are now a registered user!')
+        utility.user_verification_task(form.username.data)
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
@@ -69,9 +70,19 @@ def transaction():
         user_id = current_user.id
         amount = form.amount.data
         current_balance = current_user.current_balance
-
-        utility.add_transaction(user_id, amount, current_balance)
-        
-        flash('Congratulations, Transaction Complete!')
+        if current_user.is_verified == 1:
+            utility.add_transaction(user_id, amount, current_balance)        
+            flash('Congratulations, Transaction Complete!')
+        elif current_user.is_verified == -1:
+            flash('invalid username must not contain special char')
+        else:
+            flash('profile not verified')
         return redirect(url_for('index'))
     return render_template('transaction.html', title='Transaction', form=form)
+
+
+@app.route('/reverify')
+@login_required
+def reverify():
+    utility.user_verification_task(current_user.username)
+    return redirect(url_for('index'))

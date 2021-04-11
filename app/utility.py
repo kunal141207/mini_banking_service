@@ -1,5 +1,6 @@
 from app.models import Transaction, User
 from app import db
+import celery_tasks
 
 
 def add_transaction(user_id, amount, current_balance):
@@ -38,6 +39,10 @@ def get_transactions(user_id):
         tran_list.append(tran_dic)
     
     return tran_list
+
+def user_verification_task(username):
+    celery_tasks.user_verification.delay(username)
+
 
 class transaction_flag():
     flag = {}

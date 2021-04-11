@@ -12,6 +12,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     transactions = db.relationship('Transaction', backref='user', lazy='dynamic')
     current_balance =  db.Column(db.Integer, default=0)
+    is_verified = db.Column(db.Integer, default=0)
     
     def __repr__(self):
         return '<User {}>'.format(self.username)
