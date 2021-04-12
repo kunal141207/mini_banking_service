@@ -64,6 +64,7 @@ def register():
 
 
 @app.route('/transaction', methods=['GET', 'POST'])
+@login_required
 def transaction():
     form = TransactionForm()
     if form.validate_on_submit():
